@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Speech To Command</string>
+    <string name="name">what is your name</string>
+    <string name="weight">What is your weight</string>
+    <string name="height">What is your height</string>
+    <string name="goal">What is your goal</string>
+</resources>
