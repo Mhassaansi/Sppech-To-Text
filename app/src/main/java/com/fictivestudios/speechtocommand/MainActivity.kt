@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
             // Lollipop and above requires an additional ID to be passed.
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 // Call Lollipop+ function
-                textToSpeechEngine.speak(getString(R.string.weight), TextToSpeech.QUEUE_FLUSH, null, "tts1")
+                textToSpeechEngine.speak(text, TextToSpeech.QUEUE_FLUSH, null, "tts1")
             } else {
                 // Call Legacy function
                 textToSpeechEngine.speak(text, TextToSpeech.QUEUE_FLUSH, null)

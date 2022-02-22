@@ -13,16 +13,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SpeechToCommand">
         <activity
-            android:name=".Create_Exercies"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity2"
+            android:name=".MainActivity"
             android:exported="false" />
         <activity
             android:name=".Set_Goal"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Create_Exercies"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
