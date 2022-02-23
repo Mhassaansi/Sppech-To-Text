@@ -105,11 +105,6 @@ class Create_Exercies : AppCompatActivity() {
             TextToSpeech.OnInitListener { status ->
                 if (status == TextToSpeech.SUCCESS) {
                     textToSpeechEngine.language = Locale.US
-
-
-
-
-
                 }
             }
         )
