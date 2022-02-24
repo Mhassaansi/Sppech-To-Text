@@ -22,9 +22,9 @@ class Create_Exercies : AppCompatActivity() {
     var txtView2: TextView? = null
 
 
-    var isName=false
-    var isHeight=false
-    var isWeight=false
+    var q1=false
+    var q2=false
+    var q3=false
     @SuppressLint("ObsoleteSdkInt")
     @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,14 +41,14 @@ class Create_Exercies : AppCompatActivity() {
 
 
         // Check if user hasn't input any text.
-        if (getString(R.string.name).isNotEmpty()) {
+        if (getString(R.string.q1).isNotEmpty()) {
             // Lollipop and above requires an additional ID to be passed.
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
                 GlobalScope.launch(Dispatchers.Main)  {
                     delay(200)
-                    isName=true
-                    textToSpeechEngine.speak(getString(R.string.name), TextToSpeech.QUEUE_FLUSH, null, "tts1")
+                    q1=true
+                    textToSpeechEngine.speak(getString(R.string.q1), TextToSpeech.QUEUE_FLUSH, null, "tts1")
                 }
 
                 textToSpeechEngine.setOnUtteranceProgressListener(object:
@@ -58,20 +58,20 @@ class Create_Exercies : AppCompatActivity() {
 
                     override fun onDone(sample: String?) {
 
-                        if(isName){
-                            isName=false
-                            open_mic(REQUEST_CODE_NAME)
+                        if(q1){
+                            q1=false
+                            open_mic(RequestConstant.REQUEST_CODE_Q1)
 
                             Toast.makeText(this@Create_Exercies,sample,Toast.LENGTH_LONG).show()
                         }
-                        else if(isHeight){
-                            isHeight=false
-                            open_mic(REQUEST_CODE_HEIGHT)
+                        else if(q2){
+                            q2=false
+                            open_mic(RequestConstant.REQUEST_CODE_Q2)
 
                         }
-                        else if(isWeight){
-                            isWeight=false
-                            open_mic(REQUEST_CODE_WEIGHT)
+                        else if(q3){
+                            q3=false
+                            open_mic(RequestConstant.REQUEST_CODE_Q3)
 
                         }
                         else{
@@ -81,7 +81,6 @@ class Create_Exercies : AppCompatActivity() {
                     }
 
                     override fun onError(p0: String?) {
-                       //TODO("Not yet implemented")
                     }
                 })
             } else {
@@ -115,7 +114,7 @@ class Create_Exercies : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             // Handle the result for our request code.
-            REQUEST_CODE_NAME -> {
+            RequestConstant.REQUEST_CODE_Q1 -> {
                 // Safety checks to ensure data is available.
                 if (resultCode == Activity.RESULT_OK && data != null) {
                     // Retrieve the result array.
@@ -127,8 +126,8 @@ class Create_Exercies : AppCompatActivity() {
                         txtView!!.text = recognizedText
                         GlobalScope.launch(Dispatchers.Main) {
                             delay(200)
-                            isHeight=true
-                            textToSpeechEngine.speak(getString(R.string.height), TextToSpeech.QUEUE_FLUSH, null, "tts1")
+                            q2=true
+                            textToSpeechEngine.speak(getString(R.string.q2), TextToSpeech.QUEUE_FLUSH, null, "tts1")
                         }
 
 
@@ -137,7 +136,7 @@ class Create_Exercies : AppCompatActivity() {
             }
 
 
-            REQUEST_CODE_HEIGHT -> {
+            RequestConstant.REQUEST_CODE_Q2 -> {
                 if (resultCode == Activity.RESULT_OK && data != null) {
                     val result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
 
@@ -146,19 +145,28 @@ class Create_Exercies : AppCompatActivity() {
                         txtView1!!.text = recognizedText
                         GlobalScope.launch(Dispatchers.Main)  {
                             delay(200)
-                            isWeight=true
-                            textToSpeechEngine.speak(getString(R.string.weight), TextToSpeech.QUEUE_FLUSH, null, "tts1")
+                            q3=true
+                            textToSpeechEngine.speak(getString(R.string.q3), TextToSpeech.QUEUE_FLUSH, null, "tts1")
                         }
                     }
                 }
             }
-            REQUEST_CODE_WEIGHT -> {
+            RequestConstant.REQUEST_CODE_Q3 -> {
                 if (resultCode == Activity.RESULT_OK && data != null) {
                     val result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
 
                     if (!result.isNullOrEmpty()) {
                         val recognizedText = result[0]
                         txtView2!!.text = recognizedText
+
+                        if(recognizedText.toString()=="Performed " || recognizedText.toString()=="Scheduled" ){
+                            val intent=Intent(this,DataEntry::class.java)
+                            intent.putExtra("type",recognizedText.toString())
+                            startActivity(intent)
+                        }
+                        else{
+                            Toast.makeText(this,"Wrong Data",Toast.LENGTH_LONG).show()
+                        }
                     }
                 }
             }
@@ -175,13 +183,6 @@ class Create_Exercies : AppCompatActivity() {
         super.onDestroy()
     }
 
-    companion object {
-        private const val REQUEST_CODE_NAME = 1
-        private const val REQUEST_CODE_HEIGHT = 2
-        private const val REQUEST_CODE_WEIGHT = 3
-
-
-    }
 
     fun open_mic(requestCode: Int) {
         // Get the Intent action

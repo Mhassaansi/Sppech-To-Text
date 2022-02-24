@@ -1,7 +1,25 @@
 <resources>
     <string name="app_name">Speech To Command</string>
-    <string name="name">what is your name</string>
-    <string name="weight">What is your weight</string>
-    <string name="height">What is your height</string>
-    <string name="goal">What is your goal</string>
+    <string name="q1">Dou you want to input an exercise?</string>
+    <string name="q2">Do you want to input a food intake?</string>
+    <string name="q3">Is it scheduled one or a performed one?</string>
+    <string name="q4">Is it a recurring exercise?</string>
+    <string name="q1exs">On which date you want scheduled an exercise?</string>
+    <string name="q1exp">On which date you want scheduled an exercise?</string>
+    <string name="q2exs">Which muscle you are going to target?</string>
+    <string name="q2exp">Which muscle have you targeted?</string>
+    <string name="q3exs">How many exercises you have to perform?</string>
+    <string name="q3exp">How many exercises have you performed?</string>
+    <string name="q4exs">Which exercises you have to perform first?</string>
+    <string name="q4exp">Which exercises you have to perform first?</string>
+    <string name="q5exs">How many set you want to perform?</string>
+    <string name="q5exp">How many set have you performed? </string>
+    <string name="q6exs">How many reps you want to perform in each set?</string>
+    <string name="q6exp">How many reps have you performed in each set? </string>
+    <string name="q7exp">Which exercises have you performed second?</string>
+    <string name="q7exs">Which exercises you have to perform second?</string>
+    <string name="q8exs">How many set you want to perform?</string>
+    <string name="q8exp">How many set have you performed?</string>
+    <string name="q9exs">How many reps you want to perform in each set?</string>
+    <string name="q9exp">How many reps have you performed in each set? </string>
 </resources>
