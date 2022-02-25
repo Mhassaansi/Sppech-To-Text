@@ -12,6 +12,7 @@ import android.speech.tts.UtteranceProgressListener
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.fictivestudios.speechtocommand.Common.Companion.open_mic
 import kotlinx.coroutines.*
 import java.util.*
 
@@ -20,6 +21,9 @@ class Create_Exercies : AppCompatActivity() {
     var txtView: TextView? = null
     var txtView1: TextView? = null
     var txtView2: TextView? = null
+    var txtView3: TextView? = null
+    var txtView4: TextView? = null
+    var txtView5: TextView? = null
 
 
     var q1=false
@@ -38,6 +42,9 @@ class Create_Exercies : AppCompatActivity() {
         txtView = findViewById<TextView>(R.id.text)
         txtView1 = findViewById<TextView>(R.id.text1)
         txtView2 = findViewById<TextView>(R.id.text2)
+        txtView3=findViewById<TextView>(R.id.ans)
+        txtView4=findViewById<TextView>(R.id.ans1)
+        txtView5=findViewById<TextView>(R.id.ans2)
 
 
         // Check if user hasn't input any text.
@@ -60,18 +67,18 @@ class Create_Exercies : AppCompatActivity() {
 
                         if(q1){
                             q1=false
-                            open_mic(RequestConstant.REQUEST_CODE_Q1)
+                            open_mic(RequestConstant.REQUEST_CODE_Q1,this@Create_Exercies)
 
                             Toast.makeText(this@Create_Exercies,sample,Toast.LENGTH_LONG).show()
                         }
                         else if(q2){
                             q2=false
-                            open_mic(RequestConstant.REQUEST_CODE_Q2)
+                            open_mic(RequestConstant.REQUEST_CODE_Q2,this@Create_Exercies)
 
                         }
                         else if(q3){
                             q3=false
-                            open_mic(RequestConstant.REQUEST_CODE_Q3)
+                            open_mic(RequestConstant.REQUEST_CODE_Q3,this@Create_Exercies)
 
                         }
                         else{
@@ -123,7 +130,7 @@ class Create_Exercies : AppCompatActivity() {
                     if (!result.isNullOrEmpty()) {
                         // Recognized text is in the first position.
                         val recognizedText = result[0]
-                        txtView!!.text = recognizedText
+                        txtView3!!.text = recognizedText
                         GlobalScope.launch(Dispatchers.Main) {
                             delay(200)
                             q2=true
@@ -142,7 +149,7 @@ class Create_Exercies : AppCompatActivity() {
 
                     if (!result.isNullOrEmpty()) {
                         val recognizedText = result[0]
-                        txtView1!!.text = recognizedText
+                        txtView4!!.text = recognizedText
                         GlobalScope.launch(Dispatchers.Main)  {
                             delay(200)
                             q3=true
@@ -157,15 +164,21 @@ class Create_Exercies : AppCompatActivity() {
 
                     if (!result.isNullOrEmpty()) {
                         val recognizedText = result[0]
-                        txtView2!!.text = recognizedText
+                        txtView5!!.text = recognizedText
 
-                        if(recognizedText.toString()=="Performed " || recognizedText.toString()=="Scheduled" ){
+                        if(recognizedText.toString().lowercase(Locale.getDefault())=="performed" || recognizedText.toString().lowercase(Locale.getDefault())=="schedule" ){
                             val intent=Intent(this,DataEntry::class.java)
                             intent.putExtra("type",recognizedText.toString())
                             startActivity(intent)
                         }
                         else{
-                            Toast.makeText(this,"Wrong Data",Toast.LENGTH_LONG).show()
+                            Toast.makeText(this,"Speak Again",Toast.LENGTH_LONG).show()
+                            GlobalScope.launch(Dispatchers.Main)  {
+                                delay(200)
+                                q3=true
+                                textToSpeechEngine.speak(getString(R.string.q3), TextToSpeech.QUEUE_FLUSH, null, "tts1")
+                            }
+
                         }
                     }
                 }
@@ -181,30 +194,5 @@ class Create_Exercies : AppCompatActivity() {
     override fun onDestroy() {
         textToSpeechEngine.shutdown()
         super.onDestroy()
-    }
-
-
-    fun open_mic(requestCode: Int) {
-        // Get the Intent action
-        val sttIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-        // Language model defines the purpose, there are special models for other use cases, like search.
-        sttIntent.putExtra(
-            RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-            RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
-        )
-        // Adding an extra language, you can use any language from the Locale class.
-        sttIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
-        // Text that shows up on the Speech input prompt.
-        sttIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak now!")
-        try {
-            // Start the intent for a result, and pass in our request code.
-            startActivityForResult(sttIntent, requestCode)
-        } catch (e: ActivityNotFoundException) {
-            // Handling error when the service is not available.
-            e.printStackTrace()
-            Toast.makeText(this, "Your device does not support STT.", Toast.LENGTH_LONG).show()
-        }
-
-
     }
 }
